@@ -2,10 +2,10 @@
     "name": "SwarmClientVSCode",
     "displayName": "SwarmClientVSCode",
     "description": "Swarm debugger for VSCode to C# language based on omnisharp debugging log.",
-	"author": {
-		"name": "Eduardo Andreetta Fontana",
-		"email": "fontanadnb@gmail.com"
-	},
+    "author": {
+        "name": "Eduardo Andreetta Fontana",
+        "email": "fontanadnb@gmail.com"
+    },
     "version": "0.0.1",
     "publisher": "eduardoafontana",
     "engines": {
