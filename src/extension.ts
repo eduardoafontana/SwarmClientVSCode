@@ -8,6 +8,8 @@ import { SessionData } from './sessionData';
 const logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
 const sessionFile = "C:\\SwarmData\\VSCode\\session-20180114153066666.txt";
 
+var sessionData : SessionData = undefined;
+
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
@@ -21,6 +23,44 @@ export function activate(context: vscode.ExtensionContext) {
         //     else
         //         vscode.window.showInformationMessage("Log file not exist!");
         // });
+
+        let fileLines = readFileSync(logFile).toString().split('\n');
+
+        for (let line of fileLines) {
+            if(line.startsWith("->")){
+                let strObjLine = line.replace("-> (C) ", "");
+                let objLine = JSON.parse(strObjLine);
+                if(objLine.command == "launch"){
+                    sessionData = <SessionData> {
+                        Identifier: objLine.arguments.__sessionId,
+                        Label: "VSCode",
+                        Description: "test description2",
+                        Purpose: "test purpose",
+                        Started: new Date(),
+                        Finished: new Date(),
+                    
+                        Breakpoints: [],
+                        Events: [],
+                        PathNodes: [],
+                    
+                        Task: {},
+                        Developer: {},
+                    };
+
+                    break;
+                }
+            }
+        }
+
+        if(sessionData != undefined){
+            writeFile(sessionFile, JSON.stringify(sessionData, null, 2), (err) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                };
+                console.log("File has been created");
+            });
+        }
     });
 
     vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
@@ -31,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         //--------------------------------------------------------------------
 
+        /*
         var sessionData : SessionData = {
             Identifier: "test identifier",
             Label: "VSCode",
@@ -60,6 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
             };
             console.log("File has been created");
         });
+        */
     });
 
     vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
