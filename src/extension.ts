@@ -31,21 +31,12 @@ export function activate(context: vscode.ExtensionContext) {
                 let strObjLine = line.replace("-> (C) ", "");
                 let objLine = JSON.parse(strObjLine);
                 if(objLine.command == "launch"){
-                    sessionData = <SessionData> {
-                        Identifier: objLine.arguments.__sessionId,
-                        Label: "VSCode",
-                        Description: "test description2",
-                        Purpose: "test purpose",
-                        Started: new Date(),
-                        Finished: new Date(),
-                    
-                        Breakpoints: [],
-                        Events: [],
-                        PathNodes: [],
-                    
-                        Task: {},
-                        Developer: {},
-                    };
+                    sessionData = SessionData.newSessionData();
+                    sessionData.Identifier = objLine.arguments.__sessionId;
+                    sessionData.Label = "VSCode";
+                    sessionData.Description = "TODO";
+                    sessionData.Purpose = "TODO";
+                    sessionData.Started = new Date();
 
                     break;
                 }

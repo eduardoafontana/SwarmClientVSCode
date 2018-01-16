@@ -15,6 +15,24 @@ export class SessionData {
     public Task: {};
     public Developer: {};
 
+    public static newSessionData() {
+        return <SessionData> {
+            Identifier: "",
+            Label: "",
+            Description: "",
+            Purpose: "",
+            Started: new Date('01 January 0 00:00:00 UTC'),
+            Finished: new Date('01 January 0 00:00:00 UTC'),
+        
+            Breakpoints: [],
+            Events: [],
+            PathNodes: [],
+        
+            Task: {},
+            Developer: {},
+        };
+    }
+
 /*  TODO: review other types and elements later.
     public List<BreakpointData> Breakpoints { get; set; } = new List<BreakpointData>();
     public List<EventData> Events { get; set; } = new List<EventData>();
