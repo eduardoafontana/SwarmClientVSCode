@@ -22,13 +22,15 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
-        console.log("Event body: " + e.body);
-        console.log("Event event: " + e.event);
-        console.log("Event session: " + e.session);
+        //console.log("Event body: " + e.body);
+        //console.log("Event event: " + e.event);
+        //console.log("Event session: " + e.session);
     });
 
     vscode.debug.onDidChangeActiveDebugSession((e: vscode.DebugSession) => {
-        console.log("Change: " + e);
+        //console.log("Change: " + e);
+
+        SessionController.captureSession();
     });
 }
 
