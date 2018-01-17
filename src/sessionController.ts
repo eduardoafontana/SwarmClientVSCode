@@ -42,6 +42,13 @@ export class SessionController {
         }
     }
 
+    // exists(logFile, function(exists){
+    //     if(exports)
+    //         vscode.window.showInformationMessage("Log file exist!");
+    //     else
+    //         vscode.window.showInformationMessage("Log file not exist!");
+    // });
+
     /*
     public static verifyEntryOnLogFile(entry: string, message: string) : void {
         let fileLines1 = readFileSync(this.logFile).toString().split('\n');

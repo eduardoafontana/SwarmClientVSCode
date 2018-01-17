@@ -12,55 +12,13 @@ export function activate(context: vscode.ExtensionContext) {
 
         //SessionController.verifyEntryOnLogFile("__sessionId", "Session");
 
-        // exists(logFile, function(exists){
-        //     if(exports)
-        //         vscode.window.showInformationMessage("Log file exist!");
-        //     else
-        //         vscode.window.showInformationMessage("Log file not exist!");
-        // });
-
         SessionController.captureSession();
     });
 
     vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
         //console.log("Terminate: " + e);
-        //vscode.window.showInformationMessage('Passed here!');
 
         //SessionController.verifyEntryOnLogFile("\"command\":\"disconnect\"", "command disconnect");
-
-        //--------------------------------------------------------------------
-
-        /*
-        var sessionData : SessionData = {
-            Identifier: "test identifier",
-            Label: "VSCode",
-            Description: "test description",
-            Purpose: "test purpose",
-            Started: new Date(),
-            Finished: new Date(),
-        
-            Breakpoints: [],
-            Events: [],
-            PathNodes: [],
-        
-            Task: {},
-            Developer: {},
-        };
-
-        let fileLines = readFileSync(logFile).toString().split('\n');
-
-        for (let line of fileLines) {
-            //criar objeto de sessão
-        }
-
-        writeFile(sessionFile, JSON.stringify(sessionData, null, 2), (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            };
-            console.log("File has been created");
-        });
-        */
     });
 
     vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
