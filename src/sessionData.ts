@@ -1,3 +1,4 @@
+'use strict';
 
 export class SessionData {
 
@@ -15,7 +16,7 @@ export class SessionData {
     public Task: {};
     public Developer: {};
 
-    public static newSessionData() {
+    public static newSessionData() : SessionData {
         return <SessionData> {
             Identifier: "",
             Label: "",
