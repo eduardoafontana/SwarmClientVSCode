@@ -3,14 +3,14 @@
 import * as vscode from 'vscode';
 import { listeners } from 'cluster';
 import { readFileSync, writeFile, exists } from 'fs';
-import { EngineService } from './engineService';
+import { SessionController } from './sessionController';
 
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
         //console.log("Start: " + e);
 
-        //EngineService.verifyEntryOnLogFile("__sessionId", "Session");
+        //SessionController.verifyEntryOnLogFile("__sessionId", "Session");
 
         // exists(logFile, function(exists){
         //     if(exports)
@@ -19,14 +19,14 @@ export function activate(context: vscode.ExtensionContext) {
         //         vscode.window.showInformationMessage("Log file not exist!");
         // });
 
-        EngineService.captureSession();
+        SessionController.captureSession();
     });
 
     vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
         //console.log("Terminate: " + e);
         //vscode.window.showInformationMessage('Passed here!');
 
-        //EngineService.verifyEntryOnLogFile("\"command\":\"disconnect\"", "command disconnect");
+        //SessionController.verifyEntryOnLogFile("\"command\":\"disconnect\"", "command disconnect");
 
         //--------------------------------------------------------------------
 

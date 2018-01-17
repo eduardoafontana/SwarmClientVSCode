@@ -4,7 +4,7 @@
 import { readFileSync, writeFile, exists } from 'fs';
 import { SessionData } from './sessionData';
 
-export class EngineService {
+export class SessionController {
 
     private static readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
     private static readonly sessionFile = "C:\\SwarmData\\VSCode\\session-20180114153066666.txt";
