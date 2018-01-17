@@ -6,7 +6,11 @@ import { SessionController } from './sessionController';
 export class FileController {
 
     private static readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
-    private static readonly sessionFile = "C:\\SwarmData\\VSCode\\session-20180114153066666.txt";
+    private static readonly sessionFile = "C:\\SwarmData\\VSCode\\session-" + FileController.generateIdentifier() + ".txt";
+
+    public static generateIdentifier() : string {
+        return new Date().toISOString().replace(/-/g, '').replace(/:/g, '').replace(/\./g, '').replace(/T/g, '').replace(/Z/g, '');
+    }
 
     public static processLog() : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
