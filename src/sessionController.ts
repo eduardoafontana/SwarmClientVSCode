@@ -2,6 +2,7 @@
 
 //import * as vscode from 'vscode';
 import { SessionData } from './sessionData';
+import { BreakpointData } from './breakpointData';
 import { FileController } from './fileController';
 
 export class SessionController {
@@ -27,6 +28,10 @@ export class SessionController {
             this.sessionData.Description = "TODO";
             this.sessionData.Purpose = "TODO";
             this.sessionData.Started = new Date();
+        }
+        
+        if(objLine.command == "setBreakpoints"){
+            let breakpointData = BreakpointData.newBreakpointData(); 
         }
 
         if(this.sessionData != undefined){
