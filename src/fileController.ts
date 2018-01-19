@@ -5,22 +5,28 @@ import { SessionController } from './sessionController';
 
 export class FileController {
 
-    private static readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
-    private static readonly sessionFile = "C:\\SwarmData\\VSCode\\session-" + FileController.generateIdentifier() + ".txt";
+    private readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
+    private readonly sessionFile = "C:\\SwarmData\\VSCode\\session-" + this.generateIdentifier() + ".txt";
 
-    public static generateIdentifier() : string {
+    private sessionController = null;
+
+    constructor(sessionController: SessionController) {
+        this.sessionController = sessionController;
+    }
+
+    private generateIdentifier() : string {
         return new Date().toISOString().replace(/-/g, '').replace(/:/g, '').replace(/\./g, '').replace(/T/g, '').replace(/Z/g, '');
     }
 
-    public static processLog() : void {
+    public processLog() : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
 
         for (let line of fileLines) {
-            SessionController.processEntry(line);
+            this.sessionController.processEntry(line);
         }
     }
 
-    public static writeOutput(jsonObject : string) : void {
+    public writeOutput(jsonObject : string) : void {
         writeFile(this.sessionFile, jsonObject, (err) => {
             if (err) {
                 console.error(err);

@@ -7,13 +7,14 @@ import { FileController } from './fileController';
 
 export class SessionController {
     
-    private static sessionData : SessionData = undefined;
+    private sessionData : SessionData = null;
+    private fileController : FileController = new FileController(this);
 
-    public static captureSession() : void {
-        FileController.processLog();
+    public captureSession() : void {
+        this.fileController.processLog();
     }
 
-    public static processEntry(line : string) : void {
+    public processEntry(line : string) : void {
         if(this.invalidStartLine(line))
             return;
 
@@ -22,6 +23,8 @@ export class SessionController {
         let objLine = JSON.parse(strObjLine);
 
         if(objLine.command == "launch"){
+            //TODO test if Identifier changed, so new session on processing.
+
             this.sessionData = SessionData.newSessionData();
             this.sessionData.Identifier = objLine.arguments.__sessionId;
             this.sessionData.Label = "VSCode";
@@ -39,15 +42,15 @@ export class SessionController {
         }
 
         if(this.sessionData != undefined){
-            FileController.writeOutput(JSON.stringify(this.sessionData, null, 2));
+            this.fileController.writeOutput(JSON.stringify(this.sessionData, null, 2));
         }        
     }
 
-    private static invalidStartLine(line : string) : boolean {
+    private invalidStartLine(line : string) : boolean {
         return !line.startsWith("->");
     }
 
-    private static clearLine(line : string) : string {
+    private clearLine(line : string) : string {
         return line.replace("-> (C) ", "");
     }
 

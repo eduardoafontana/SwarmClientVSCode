@@ -5,6 +5,8 @@ import { listeners } from 'cluster';
 import { readFileSync, writeFile, exists } from 'fs';
 import { SessionController } from './sessionController';
 
+var sessionController: SessionController = null;
+
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
@@ -12,7 +14,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         //SessionController.verifyEntryOnLogFile("__sessionId", "Session");
 
-        SessionController.captureSession();
+        sessionController = new SessionController();
+        sessionController.captureSession();
     });
 
     vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
@@ -30,7 +33,12 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.debug.onDidChangeActiveDebugSession((e: vscode.DebugSession) => {
         //console.log("Change: " + e);
 
-        SessionController.captureSession();
+        if(sessionController == null)
+            return;
+
+        sessionController.captureSession();
+
+        sessionController = null;
     });
 }
 
