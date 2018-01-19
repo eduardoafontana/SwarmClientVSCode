@@ -2,7 +2,7 @@
 
 //import * as vscode from 'vscode';
 import { SessionData } from './sessionData';
-import { BreakpointData } from './breakpointData';
+import { BreakpointData, BreakpointKind } from './breakpointData';
 import { FileController } from './fileController';
 
 export class SessionController {
@@ -31,7 +31,11 @@ export class SessionController {
         }
         
         if(objLine.command == "setBreakpoints"){
-            let breakpointData = BreakpointData.newBreakpointData(); 
+            let breakpointData = BreakpointData.newBreakpointData();
+            breakpointData.BreakpointKind = BreakpointKind.Line.toString();//persisting zero, review later
+            breakpointData.Created = new Date();
+
+            this.sessionData.Breakpoints.push(breakpointData);
         }
 
         if(this.sessionData != undefined){
