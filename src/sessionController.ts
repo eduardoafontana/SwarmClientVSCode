@@ -1,6 +1,5 @@
 'use strict';
 
-//import * as vscode from 'vscode';
 import { SessionData } from './sessionData';
 import { BreakpointData, BreakpointKind } from './breakpointData';
 import { FileController } from './fileController';
@@ -53,22 +52,4 @@ export class SessionController {
     private clearLine(line : string) : string {
         return line.replace("-> (C) ", "");
     }
-
-    /*
-    public static verifyEntryOnLogFile(entry: string, message: string) : void {
-        let fileLines1 = readFileSync(this.logFile).toString().split('\n');
-        let notFound = true;
-    
-        for (let line of fileLines1) {
-            if(line.indexOf(entry) > 0) {
-                notFound = false;
-                vscode.window.showInformationMessage(message + " exist on file! " + line.substr(line.indexOf(entry) + 12, 36));
-                break;
-            }
-        }
-    
-        if(notFound)
-            vscode.window.showInformationMessage(message + " does NOT exist on file!");
-    }
-    */
 }

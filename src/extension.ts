@@ -10,35 +10,28 @@ var sessionController: SessionController = null;
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
-        //console.log("Start: " + e);
-
-        //SessionController.verifyEntryOnLogFile("__sessionId", "Session");
-
         sessionController = new SessionController();
         sessionController.captureSession();
     });
 
-    vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
-        //console.log("Terminate: " + e);
-
-        //SessionController.verifyEntryOnLogFile("\"command\":\"disconnect\"", "command disconnect");
-    });
-
-    vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
-        //console.log("Event body: " + e.body);
-        //console.log("Event event: " + e.event);
-        //console.log("Event session: " + e.session);
-    });
-
     vscode.debug.onDidChangeActiveDebugSession((e: vscode.DebugSession) => {
-        //console.log("Change: " + e);
+        if(sessionController == null)
+            return;
 
+        sessionController.captureSession();
+    });
+
+    vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
         if(sessionController == null)
             return;
 
         sessionController.captureSession();
 
         sessionController = null;
+    });
+
+    vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
+
     });
 }
 

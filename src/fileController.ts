@@ -35,11 +35,4 @@ export class FileController {
             console.log("File has been created");
         }); 
     }
-
-    // exists(logFile, function(exists){
-    //     if(exports)
-    //         vscode.window.showInformationMessage("Log file exist!");
-    //     else
-    //         vscode.window.showInformationMessage("Log file not exist!");
-    // });
 }
