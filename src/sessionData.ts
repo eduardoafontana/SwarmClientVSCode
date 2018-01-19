@@ -1,5 +1,7 @@
 'use strict';
 
+import { BreakpointData } from './breakpointData';
+
 export class SessionData {
 
     public Identifier: string;
@@ -9,7 +11,7 @@ export class SessionData {
     public Started: Date;
     public Finished: Date;
 
-    public Breakpoints: string[];
+    public Breakpoints: BreakpointData[];
     public Events: string[];
     public PathNodes: string[];
 
