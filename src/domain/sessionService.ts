@@ -5,7 +5,7 @@ import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
 import { VsdbgFileLog } from './../swarmClientVSCode/vsdbgFileLog';
 
-export class SessionController {
+export class SessionService {
     
     private sessionData : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();

@@ -1,23 +1,23 @@
 'use strict';
 
 import { readFileSync, writeFile, exists } from 'fs';
-import { SessionController } from './../domain/sessionController';
+import { SessionService } from './../domain/sessionService';
 
 export class VsdbgFileLog {
 
     private readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
 
-    private sessionController = null;
+    private sessionService = null;
 
-    constructor(sessionController: SessionController) {
-        this.sessionController = sessionController;
+    constructor(sessionService: SessionService) {
+        this.sessionService = sessionService;
     }
 
     public processLog() : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
 
         for (let line of fileLines) {
-            this.sessionController.processEntry(line);
+            this.sessionService.processEntry(line);
         }
     }
 }

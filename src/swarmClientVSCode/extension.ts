@@ -3,31 +3,31 @@
 import * as vscode from 'vscode';
 import { listeners } from 'cluster';
 import { readFileSync, writeFile, exists } from 'fs';
-import { SessionController } from './../domain/sessionController';
+import { SessionService } from './../domain/sessionService';
 
-var sessionController: SessionController = null;
+var sessionService: SessionService = null;
 
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
-        sessionController = new SessionController();
-        sessionController.captureSession();
+        sessionService = new SessionService();
+        sessionService.captureSession();
     });
 
     vscode.debug.onDidChangeActiveDebugSession((e: vscode.DebugSession) => {
-        if(sessionController == null)
+        if(sessionService == null)
             return;
 
-        sessionController.captureSession();
+            sessionService.captureSession();
     });
 
     vscode.debug.onDidTerminateDebugSession((e: vscode.DebugSession) => {
-        if(sessionController == null)
+        if(sessionService == null)
             return;
 
-        sessionController.captureSession();
+        sessionService.captureSession();
 
-        sessionController = null;
+        sessionService = null;
     });
 
     vscode.debug.onDidReceiveDebugSessionCustomEvent((e: vscode.DebugSessionCustomEvent) => {
