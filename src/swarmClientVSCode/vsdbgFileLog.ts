@@ -2,6 +2,7 @@
 
 import { readFileSync, writeFile, exists } from 'fs';
 import { SessionService } from './../domain/sessionService';
+import { BreakpointKind } from '../domain/dataModel/breakpointData';
 
 export class VsdbgFileLog {
 
@@ -13,15 +14,21 @@ export class VsdbgFileLog {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
 
         for (let line of fileLines) {
-
-            //TODO: improve to capture json oject from file log and send it to service by domain model.
-
             if(this.invalidStartLine(line))
-                return;
+                continue;
 
             let strObjLine = this.clearLine(line);
 
-            this.sessionService.processEntry(strObjLine);
+            let objLine = JSON.parse(strObjLine);
+
+            switch (objLine.command) {
+                case "launch":
+                    this.sessionService.registerNewSession(objLine.arguments.__sessionId);
+                    break;
+                case "setBreakpoints":
+                    this.sessionService.registerBreakpoint();
+                    break;
+            }
         }
     }
 

@@ -9,30 +9,24 @@ export class SessionService {
     private sessionData : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
-    public processEntry(strObjLine : string) : void {
-        let objLine = JSON.parse(strObjLine);
+    public registerNewSession(identifier : string) : void{
+        this.sessionData = SessionData.newSessionData();
+        this.sessionData.Identifier = identifier;
+        this.sessionData.Label = "VSCode";
+        this.sessionData.Description = "TODO";
+        this.sessionData.Purpose = "TODO";
+        this.sessionData.Started = new Date();
 
-        if(objLine.command == "launch"){
-            //TODO test if Identifier changed, so new session on processing.
+        this.repositoryLog.save(this.sessionData);
+    }
 
-            this.sessionData = SessionData.newSessionData();
-            this.sessionData.Identifier = objLine.arguments.__sessionId;
-            this.sessionData.Label = "VSCode";
-            this.sessionData.Description = "TODO";
-            this.sessionData.Purpose = "TODO";
-            this.sessionData.Started = new Date();
+    public registerBreakpoint() : void {
+        let breakpointData = BreakpointData.newBreakpointData();
+        breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
+        breakpointData.Created = new Date();
 
-            this.repositoryLog.save(this.sessionData);
-        }
-        
-        if(objLine.command == "setBreakpoints"){
-            let breakpointData = BreakpointData.newBreakpointData();
-            breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
-            breakpointData.Created = new Date();
+        this.sessionData.Breakpoints.push(breakpointData);
 
-            this.sessionData.Breakpoints.push(breakpointData);
-
-            this.repositoryLog.save(this.sessionData);
-        }
+        this.repositoryLog.save(this.sessionData);
     }
 }
