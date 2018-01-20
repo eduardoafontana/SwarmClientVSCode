@@ -9,6 +9,7 @@ export class VsdbgFileLog {
     private readonly logFile = "C:\\Users\\EduardoAFontana\\vsdbg-ui.log";
 
     private sessionService : SessionService = new SessionService();
+    private currentSessionId : string = null;
 
     public processFileLog() : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
@@ -23,7 +24,7 @@ export class VsdbgFileLog {
 
             switch (objLine.command) {
                 case "launch":
-                    this.sessionService.registerNewSession(objLine.arguments.__sessionId);
+                    this.processLaunch(objLine);
                     break;
                 case "setBreakpoints":
                     this.sessionService.registerBreakpoint();
@@ -41,5 +42,18 @@ export class VsdbgFileLog {
 
     private clearLine(line : string) : string {
         return line.replace("-> (C) ", "");
+    }
+
+    private processLaunch(objLine : any): void {
+        if(this.currentSessionId == null)
+            this.currentSessionId = objLine.arguments.__sessionId;
+
+        if(this.currentSessionId == objLine.arguments.__sessionId)
+            this.sessionService.registerNewSession(objLine.arguments.__sessionId);
+        else{
+            this.sessionService.endCurrentSession();
+
+            this.sessionService.registerNewSession(objLine.arguments.__sessionId);
+        }
     }
 }
