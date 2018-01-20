@@ -34,7 +34,7 @@ export class SessionController {
         
         if(objLine.command == "setBreakpoints"){
             let breakpointData = BreakpointData.newBreakpointData();
-            breakpointData.BreakpointKind = BreakpointKind.Line.toString();//persisting zero, review later
+            breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
             breakpointData.Created = new Date();
 
             this.sessionData.Breakpoints.push(breakpointData);
