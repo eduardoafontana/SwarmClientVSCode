@@ -29,4 +29,10 @@ export class SessionService {
 
         this.repositoryLog.save(this.sessionData);
     }
+
+    public endCurrentSession() : void {
+        this.sessionData.Finished = new Date();
+
+        this.repositoryLog.save(this.sessionData);
+    }
 }

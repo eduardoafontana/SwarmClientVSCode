@@ -28,6 +28,9 @@ export class VsdbgFileLog {
                 case "setBreakpoints":
                     this.sessionService.registerBreakpoint();
                     break;
+                case "disconnect":
+                    this.sessionService.endCurrentSession();
+                    break;
             }
         }
     }
