@@ -2,7 +2,7 @@
 
 import { SessionData } from './dataModel/sessionData';
 import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
-import { FileController } from './fileController';
+import { FileController } from './../dataLog/fileController';
 
 export class SessionController {
     

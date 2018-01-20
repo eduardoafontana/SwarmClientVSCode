@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { listeners } from 'cluster';
 import { readFileSync, writeFile, exists } from 'fs';
-import { SessionController } from './sessionController';
+import { SessionController } from './../domain/sessionController';
 
 var sessionController: SessionController = null;
 

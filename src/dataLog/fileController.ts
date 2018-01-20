@@ -1,7 +1,7 @@
 'use strict';
 
 import { readFileSync, writeFile, exists } from 'fs';
-import { SessionController } from './sessionController';
+import { SessionController } from './../domain/sessionController';
 
 export class FileController {
 
