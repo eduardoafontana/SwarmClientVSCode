@@ -17,7 +17,7 @@
     "activationEvents": [
         "onDebug"
     ],
-    "main": "./out/extension",
+    "main": "./out/swarmClientVSCode/extension",
     "contributes": {
         "commands": []
     },
