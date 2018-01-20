@@ -6,21 +6,21 @@ import { RepositoryLog } from './../dataLog/repositoryLog';
 
 export class SessionService {
     
-    private sessionData : SessionData = null;
+    private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
     public registerNewSession(identifier : string) : void{
-        if(this.sessionData != null)
+        if(this.currentSession != null)
             return;
 
-        this.sessionData = SessionData.newSessionData();
-        this.sessionData.Identifier = identifier;
-        this.sessionData.Label = "VSCode";
-        this.sessionData.Description = "TODO";
-        this.sessionData.Purpose = "TODO";
-        this.sessionData.Started = new Date();
+        this.currentSession = SessionData.newSessionData();
+        this.currentSession.Identifier = identifier;
+        this.currentSession.Label = "VSCode";
+        this.currentSession.Description = "TODO";
+        this.currentSession.Purpose = "TODO";
+        this.currentSession.Started = new Date();
 
-        this.repositoryLog.save(this.sessionData);
+        this.repositoryLog.save(this.currentSession);
     }
 
     public registerBreakpoint() : void {
@@ -28,16 +28,16 @@ export class SessionService {
         breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
         breakpointData.Created = new Date();
 
-        this.sessionData.Breakpoints.push(breakpointData);
+        this.currentSession.Breakpoints.push(breakpointData);
 
-        this.repositoryLog.save(this.sessionData);
+        this.repositoryLog.save(this.currentSession);
     }
 
     public endCurrentSession() : void {
-        this.sessionData.Finished = new Date();
+        this.currentSession.Finished = new Date();
 
-        this.repositoryLog.save(this.sessionData);
+        this.repositoryLog.save(this.currentSession);
 
-        this.sessionData = null;
+        this.currentSession = null;
     }
 }
