@@ -3,20 +3,21 @@
 import { SessionData } from './dataModel/sessionData';
 import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
+import { Guid } from "guid-typescript";
 
 export class SessionService {
     
     private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
-    public registerNewSession(identifier : string) : void{
+    public registerNewSession(dbgSessionId : string) : void{
         if(this.currentSession != null)
             return;
 
         this.currentSession = SessionData.newSessionData();
-        this.currentSession.Identifier = identifier;
+        this.currentSession.Identifier = Guid.create().toString();
         this.currentSession.Label = "VSCode";
-        this.currentSession.Description = "TODO";
+        this.currentSession.Description = "_sessionId in vsdbg-ui.log is: " + dbgSessionId;
         this.currentSession.Purpose = "TODO";
         this.currentSession.Started = new Date();
 
