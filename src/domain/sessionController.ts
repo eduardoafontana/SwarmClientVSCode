@@ -2,15 +2,17 @@
 
 import { SessionData } from './dataModel/sessionData';
 import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
-import { FileController } from './../dataLog/fileController';
+import { RepositoryLog } from './../dataLog/repositoryLog';
+import { VsdbgFileLog } from './../swarmClientVSCode/vsdbgFileLog';
 
 export class SessionController {
     
     private sessionData : SessionData = null;
-    private fileController : FileController = new FileController(this);
+    private repositoryLog : RepositoryLog = new RepositoryLog();
+    private vsdbgFileLog : VsdbgFileLog = new VsdbgFileLog(this);
 
     public captureSession() : void {
-        this.fileController.processLog();
+        this.vsdbgFileLog.processLog();
     }
 
     public processEntry(line : string) : void {
@@ -41,7 +43,7 @@ export class SessionController {
         }
 
         if(this.sessionData != undefined){
-            this.fileController.writeOutput(JSON.stringify(this.sessionData, null, 2));
+            this.repositoryLog.writeOutput(JSON.stringify(this.sessionData, null, 2));
         }        
     }
 
