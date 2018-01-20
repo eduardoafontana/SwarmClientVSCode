@@ -1,7 +1,7 @@
 'use strict';
 
-import { SessionData } from './sessionData';
-import { BreakpointData, BreakpointKind } from './breakpointData';
+import { SessionData } from './dataModel/sessionData';
+import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
 import { FileController } from './fileController';
 
 export class SessionController {
