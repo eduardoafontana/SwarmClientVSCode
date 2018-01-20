@@ -1,6 +1,6 @@
 'use strict';
 
-import { readFileSync, writeFile, exists } from 'fs';
+import { readFileSync, writeFile, exists, watch } from 'fs';
 import { SessionService } from './../domain/sessionService';
 import { BreakpointKind } from '../domain/dataModel/breakpointData';
 
@@ -34,6 +34,14 @@ export class VsdbgFileLog {
                     break;
             }
         }
+    }
+
+    public initWatch(): void {
+        var self = this;
+
+        watch(this.logFile, function(e: string) {
+            self.processFileLog();
+        });
     }
 
     private invalidStartLine(line : string) : boolean {

@@ -11,6 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
         vsdbgFileLog = new VsdbgFileLog();
         vsdbgFileLog.processFileLog();
+        vsdbgFileLog.initWatch();
     });
 
     vscode.debug.onDidChangeActiveDebugSession((e: vscode.DebugSession) => {
