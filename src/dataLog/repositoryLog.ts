@@ -4,10 +4,11 @@ import { readFileSync, writeFile, exists } from 'fs';
 
 export class RepositoryLog {
 
-    private readonly sessionFile = "C:\\SwarmData\\VSCode\\session-" + this.generateIdentifier() + ".txt";
+    private identifier : string;
+    private sessionFile = "C:\\SwarmData\\VSCode\\session-" + this.identifier + ".txt";
 
-    private generateIdentifier() : string {
-        return new Date().toISOString().replace(/-/g, '').replace(/:/g, '').replace(/\./g, '').replace(/T/g, '').replace(/Z/g, '');
+    public generateIdentifier() : void {
+        this.identifier = new Date().toISOString().replace(/-/g, '').replace(/:/g, '').replace(/\./g, '').replace(/T/g, '').replace(/Z/g, '');
     }
 
     private writeOutput(jsonObject : string) : void {
@@ -19,7 +20,7 @@ export class RepositoryLog {
         }); 
     }
 
-    public save(pObject : object) : void{
+    public save(pObject : object) : void {
         if(pObject == null)
             return;
 

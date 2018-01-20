@@ -20,6 +20,7 @@ export class SessionService {
         this.currentSession.Purpose = "TODO";
         this.currentSession.Started = new Date();
 
+        this.repositoryLog.generateIdentifier();
         this.repositoryLog.save(this.currentSession);
     }
 
