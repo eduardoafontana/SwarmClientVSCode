@@ -10,6 +10,9 @@ export class SessionService {
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
     public registerNewSession(identifier : string) : void{
+        if(this.sessionData != null)
+            return;
+
         this.sessionData = SessionData.newSessionData();
         this.sessionData.Identifier = identifier;
         this.sessionData.Label = "VSCode";
@@ -34,5 +37,7 @@ export class SessionService {
         this.sessionData.Finished = new Date();
 
         this.repositoryLog.save(this.sessionData);
+
+        this.sessionData = null;
     }
 }
