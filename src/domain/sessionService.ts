@@ -21,6 +21,8 @@ export class SessionService {
             this.sessionData.Description = "TODO";
             this.sessionData.Purpose = "TODO";
             this.sessionData.Started = new Date();
+
+            this.repositoryLog.save(this.sessionData);
         }
         
         if(objLine.command == "setBreakpoints"){
@@ -29,10 +31,8 @@ export class SessionService {
             breakpointData.Created = new Date();
 
             this.sessionData.Breakpoints.push(breakpointData);
-        }
 
-        if(this.sessionData != undefined){
-            this.repositoryLog.writeOutput(JSON.stringify(this.sessionData, null, 2));
-        }        
+            this.repositoryLog.save(this.sessionData);
+        }
     }
 }

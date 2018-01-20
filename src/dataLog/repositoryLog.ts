@@ -10,12 +10,22 @@ export class RepositoryLog {
         return new Date().toISOString().replace(/-/g, '').replace(/:/g, '').replace(/\./g, '').replace(/T/g, '').replace(/Z/g, '');
     }
 
-    public writeOutput(jsonObject : string) : void {
+    private writeOutput(jsonObject : string) : void {
         writeFile(this.sessionFile, jsonObject, (err) => {
             if (err) {
                 console.error(err);
                 return;
             };
         }); 
+    }
+
+    public save(pObject : object) : void{
+        if(pObject == null)
+            return;
+
+        if(pObject == undefined)
+            return;
+
+        this.writeOutput(JSON.stringify(pObject, null, 2));
     }
 }
