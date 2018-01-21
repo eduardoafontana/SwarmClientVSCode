@@ -58,6 +58,7 @@ export class SessionService {
             breakpointData.FileName = breakpoint.FileName;
             breakpointData.Namespace = breakpoint.Namespace;
             breakpointData.Type = breakpoint.Type;
+            breakpointData.LineOfCode = breakpoint.LineOfCode;
             breakpointData.Created = new Date();
     
             this.currentSession.Breakpoints.push(breakpointData);

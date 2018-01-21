@@ -41,4 +41,17 @@ export class CodeReader {
             return "Fatal error to get class in file.";
         }
     }
+
+    public static getCurrentLine(filePath: string, lineNumber: number): string {
+        let fileLines = readFileSync(filePath).toString().split('\n');
+
+        try
+        {
+            return fileLines[lineNumber - 1].trim();//-1 because starts from zero, but in vscode starts from one.
+        }
+        catch
+        {
+            return "Fatal error to get line code in file.";
+        }
+    }
 }
