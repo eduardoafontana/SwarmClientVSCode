@@ -27,7 +27,6 @@ export class VsdbgFileLog {
                 break;
             } else if(objLine.command == "setBreakpoints" && eventAction == "setBreakpoints"){
                 this.processBreakpoint(objLine);
-                break;
             } else if(objLine.command == "disconnect" && eventAction == "disconnect"){
                 this.sessionService.endCurrentSession();
                 break;
