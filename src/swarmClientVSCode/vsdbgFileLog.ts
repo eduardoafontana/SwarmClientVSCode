@@ -11,7 +11,7 @@ export class VsdbgFileLog {
     private sessionService : SessionService = new SessionService();
     private currentSessionId : string = null;
 
-    public processFileLog() : void {
+    public processFileLog(eventAction : string) : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
 
         for (let line of fileLines) {
@@ -22,25 +22,24 @@ export class VsdbgFileLog {
 
             let objLine = JSON.parse(strObjLine);
 
-            switch (objLine.command) {
-                case "launch":
-                    this.processLaunch(objLine);
-                    break;
-                case "setBreakpoints":
-                    this.sessionService.registerBreakpoint();
-                    break;
-                case "disconnect":
-                    this.sessionService.endCurrentSession();
-                    break;
+            if(objLine.command == "launch" && eventAction == "launch"){
+                this.processLaunch(objLine);
+                break;
+            } else if(objLine.command == "setBreakpoints" && eventAction == "setBreakpoints"){
+                this.sessionService.registerBreakpoint();
+                break;
+            } else if(objLine.command == "disconnect" && eventAction == "disconnect"){
+                this.sessionService.endCurrentSession();
+                break;
             }
         }
     }
 
-    public initWatch(): void {
+    public initMonitoringFileLog(): void {
         var self = this;
 
         watch(this.logFile, function(e: string) {
-            self.processFileLog();
+            self.processFileLog("setBreakpoints");
         });
     }
 

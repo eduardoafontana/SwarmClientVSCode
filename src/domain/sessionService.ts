@@ -26,6 +26,9 @@ export class SessionService {
     }
 
     public registerBreakpoint() : void {
+        if(this.currentSession == null)
+            return;
+
         let breakpointData = BreakpointData.newBreakpointData();
         breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
         breakpointData.Created = new Date();
