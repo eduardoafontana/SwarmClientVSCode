@@ -1,6 +1,6 @@
 'use strict';
 
-import { readFileSync, writeFile, exists } from 'fs';
+import { readFileSync, writeFile, writeFileSync, exists } from 'fs';
 
 export class RepositoryLog {
 
@@ -13,12 +13,7 @@ export class RepositoryLog {
     }
 
     private writeOutput(jsonObject : string) : void {
-        writeFile(this.sessionFile, jsonObject, (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            };
-        }); 
+        writeFileSync(this.sessionFile, jsonObject);
     }
 
     public save(pObject : object) : void {
