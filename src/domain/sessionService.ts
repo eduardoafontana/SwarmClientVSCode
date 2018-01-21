@@ -4,6 +4,7 @@ import { SessionData } from './dataModel/sessionData';
 import { BreakpointData, BreakpointKind, BreakpointOrigin } from './dataModel/breakpointData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
 import { Guid } from "guid-typescript";
+import { BreakpointModel } from './inputModel/breakpointModel';
 
 export class SessionService {
     
@@ -29,7 +30,7 @@ export class SessionService {
         this.notAddedBreakpoints = true;
     }
 
-    public registerBreakpoint() : void {
+    public registerBreakpoint(breakpoints: BreakpointModel[]) : void {
         if(this.currentSession == null)
             return;
 
@@ -41,12 +42,24 @@ export class SessionService {
             this.notAddedBreakpoints = false;
         }
 
-        let breakpointData = BreakpointData.newBreakpointData();
-        breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
-        breakpointData.Origin = breakpointOrigin;
-        breakpointData.Created = new Date();
+        for (let breakpoint of breakpoints) {
 
-        this.currentSession.Breakpoints.push(breakpointData);
+            let exist = this.currentSession.Breakpoints.filter(b => 
+                b.FileName == breakpoint.FileName && 
+                b.LineNumber == breakpoint.FileLine)[0];
+
+            if(exist != undefined)
+                continue;
+
+            let breakpointData = BreakpointData.newBreakpointData();
+            breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
+            breakpointData.Origin = breakpointOrigin;
+            breakpointData.LineNumber = breakpoint.FileLine;
+            breakpointData.FileName = breakpoint.FileName;
+            breakpointData.Created = new Date();
+    
+            this.currentSession.Breakpoints.push(breakpointData);
+        }
 
         this.repositoryLog.save(this.currentSession);
     }

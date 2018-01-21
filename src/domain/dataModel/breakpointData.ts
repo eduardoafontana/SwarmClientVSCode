@@ -13,6 +13,7 @@ export class BreakpointData {
     public LineOfCode: string;
     public Origin: string;
     public Created: Date;
+    public FileName: string;//TODO: new, review it on SwarmVS2015/2017
 
     public static newBreakpointData() : BreakpointData {
         return <BreakpointData> {
@@ -23,6 +24,7 @@ export class BreakpointData {
             LineOfCode: "",
             Origin: "",
             Created: new Date('01 January 0 00:00:00 UTC'),
+            FileName: "",
         };
     }
 

@@ -2,7 +2,7 @@
 
 import { readFileSync, writeFile, exists, watch } from 'fs';
 import { SessionService } from './../domain/sessionService';
-import { BreakpointKind } from '../domain/dataModel/breakpointData';
+import { BreakpointModel } from '../domain/inputModel/breakpointModel';
 
 export class VsdbgFileLog {
 
@@ -26,7 +26,7 @@ export class VsdbgFileLog {
                 this.processLaunch(objLine);
                 break;
             } else if(objLine.command == "setBreakpoints" && eventAction == "setBreakpoints"){
-                this.sessionService.registerBreakpoint();
+                this.processBreakpoint(objLine);
                 break;
             } else if(objLine.command == "disconnect" && eventAction == "disconnect"){
                 this.sessionService.endCurrentSession();
@@ -62,5 +62,19 @@ export class VsdbgFileLog {
 
             this.sessionService.registerNewSession(objLine.arguments.__sessionId);
         }
+    }
+
+    private processBreakpoint(objLine: any): void {
+        let breakpoints = [];
+
+        for (let breakpointEntry of objLine.arguments.breakpoints) {
+            let breakpoint = BreakpointModel.newBreakpointModel();
+            breakpoint.FileName = objLine.arguments.source.name;
+            breakpoint.FileLine = breakpointEntry.line;
+
+            breakpoints.push(breakpoint);
+        }
+
+        this.sessionService.registerBreakpoint(breakpoints);
     }
 }
