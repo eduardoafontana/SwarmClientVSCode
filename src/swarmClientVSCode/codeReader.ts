@@ -22,4 +22,23 @@ export class CodeReader {
             return "Fatal error to get namespace in file.";
         }
     }
+
+    public static getType(filePath: string): string {
+        let fileLines = readFileSync(filePath).toString().split('\n');
+
+        let classLine = fileLines.filter(line => line.indexOf("class") >= 0)[0];
+
+        if(classLine == undefined)
+            return "Fail to get class, class word not found.";
+
+        try
+        {
+            let classWordPosition = classLine.indexOf("class");
+            return classLine.substr(classWordPosition + 5, classLine.length - (classWordPosition + 5)).trim();
+        }
+        catch
+        {
+            return "Fatal error to get class in file.";
+        }
+    }
 }

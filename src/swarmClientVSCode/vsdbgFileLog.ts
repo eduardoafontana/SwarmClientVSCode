@@ -72,6 +72,7 @@ export class VsdbgFileLog {
             breakpoint.FileName = objLine.arguments.source.name;
             breakpoint.LineNumber = breakpointEntry.line;
             breakpoint.Namespace = CodeReader.getNamespace(objLine.arguments.source.path);
+            breakpoint.Type = CodeReader.getType(objLine.arguments.source.path);
 
             breakpoints.push(breakpoint);
         }
