@@ -1,7 +1,7 @@
 'use strict';
 
 import { SessionData } from './dataModel/sessionData';
-import { BreakpointData, BreakpointKind } from './dataModel/breakpointData';
+import { BreakpointData, BreakpointKind, BreakpointOrigin } from './dataModel/breakpointData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
 import { Guid } from "guid-typescript";
 
@@ -9,6 +9,8 @@ export class SessionService {
     
     private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
+
+    private notAddedBreakpoints : boolean = true;
 
     public registerNewSession(dbgSessionId : string) : void{
         if(this.currentSession != null)
@@ -23,14 +25,25 @@ export class SessionService {
 
         this.repositoryLog.generateIdentifier();
         this.repositoryLog.save(this.currentSession);
+
+        this.notAddedBreakpoints = true;
     }
 
     public registerBreakpoint() : void {
         if(this.currentSession == null)
             return;
 
+        let breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedDuringDebug];
+
+        if (this.notAddedBreakpoints){
+            breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
+
+            this.notAddedBreakpoints = false;
+        }
+
         let breakpointData = BreakpointData.newBreakpointData();
         breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
+        breakpointData.Origin = breakpointOrigin;
         breakpointData.Created = new Date();
 
         this.currentSession.Breakpoints.push(breakpointData);
@@ -44,5 +57,6 @@ export class SessionService {
         this.repositoryLog.save(this.currentSession);
 
         this.currentSession = null;
+        this.notAddedBreakpoints = true;
     }
 }
