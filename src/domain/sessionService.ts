@@ -46,7 +46,7 @@ export class SessionService {
 
             let exist = this.currentSession.Breakpoints.filter(b => 
                 b.FileName == breakpoint.FileName && 
-                b.LineNumber == breakpoint.FileLine)[0];
+                b.LineNumber == breakpoint.LineNumber)[0];
 
             if(exist != undefined)
                 continue;
@@ -54,8 +54,9 @@ export class SessionService {
             let breakpointData = BreakpointData.newBreakpointData();
             breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
             breakpointData.Origin = breakpointOrigin;
-            breakpointData.LineNumber = breakpoint.FileLine;
+            breakpointData.LineNumber = breakpoint.LineNumber;
             breakpointData.FileName = breakpoint.FileName;
+            breakpointData.Namespace = breakpoint.Namespace;
             breakpointData.Created = new Date();
     
             this.currentSession.Breakpoints.push(breakpointData);

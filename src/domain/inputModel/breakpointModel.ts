@@ -3,12 +3,18 @@
 export class BreakpointModel {
 
     public FileName: string;
-    public FileLine: number;
+    public LineNumber: number;
+    public LineOfCode: string;
+    public Namespace: string;
+    public Type: string;    
 
     public static newBreakpointModel() : BreakpointModel {
         return <BreakpointModel> {
             FileName: "",
-            FileLine: 0,
+            LineNumber: 0,
+            LineOfCode: "",
+            Namespace: "",
+            Type: "",
         };
     }
 }

@@ -3,6 +3,7 @@
 import { readFileSync, writeFile, exists, watch } from 'fs';
 import { SessionService } from './../domain/sessionService';
 import { BreakpointModel } from '../domain/inputModel/breakpointModel';
+import { CodeReader } from './codeReader';
 
 export class VsdbgFileLog {
 
@@ -69,7 +70,8 @@ export class VsdbgFileLog {
         for (let breakpointEntry of objLine.arguments.breakpoints) {
             let breakpoint = BreakpointModel.newBreakpointModel();
             breakpoint.FileName = objLine.arguments.source.name;
-            breakpoint.FileLine = breakpointEntry.line;
+            breakpoint.LineNumber = breakpointEntry.line;
+            breakpoint.Namespace = CodeReader.getNamespace(objLine.arguments.source.path);
 
             breakpoints.push(breakpoint);
         }
