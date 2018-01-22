@@ -1,6 +1,7 @@
 'use strict';
 
 import { BreakpointData } from './breakpointData';
+import { EventData } from './eventData';
 
 export class SessionData {
 
@@ -12,7 +13,7 @@ export class SessionData {
     public Finished: Date;
 
     public Breakpoints: BreakpointData[];
-    public Events: string[];
+    public Events: EventData[];
     public PathNodes: string[];
 
     public Task: {};

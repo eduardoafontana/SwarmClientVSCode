@@ -2,6 +2,7 @@
 
 import { SessionData } from './dataModel/sessionData';
 import { BreakpointData, BreakpointKind, BreakpointOrigin } from './dataModel/breakpointData';
+import { EventData, EventKind } from './dataModel/eventData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
 import { Guid } from "guid-typescript";
 import { BreakpointModel } from './inputModel/breakpointModel';
@@ -51,6 +52,21 @@ export class SessionService {
             if(exist != undefined)
                 continue;
 
+            let eventData = EventData.newEventData();
+            eventData.EventKind = EventKind[EventKind.BreakpointAdd];
+            //     Detail = item.Name,
+            eventData.Namespace = breakpoint.Namespace;
+            eventData.Type = breakpoint.Type;
+            eventData.TypeFullPath = "TODO",
+            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+            eventData.MethodKey = "",
+            //     MethodSignature = item.FunctionName,
+            //     CharStart = item.StartLineText,
+            //     CharEnd = item.DocumentModel.EndLineText,
+            eventData.LineNumber = breakpoint.LineNumber;
+            eventData.LineOfCode = breakpoint.LineOfCode;
+            eventData.Created = new Date();
+
             let breakpointData = BreakpointData.newBreakpointData();
             breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
             breakpointData.Origin = breakpointOrigin;
@@ -61,6 +77,7 @@ export class SessionService {
             breakpointData.LineOfCode = breakpoint.LineOfCode;
             breakpointData.Created = new Date();
     
+            this.currentSession.Events.push(eventData);
             this.currentSession.Breakpoints.push(breakpointData);
         }
 
