@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.debug.onDidStartDebugSession((e: vscode.DebugSession) => {
         vsdbgFileLog = new VsdbgFileLog();
 
-        vsdbgFileLog.processFileLog("launch");
+        vsdbgFileLog.processFileLog(["launch"]);
         
         vsdbgFileLog.initMonitoringFileLog();
     });
@@ -28,8 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
         if(vsdbgFileLog == null)
             return;
 
-        vsdbgFileLog.processFileLog("setBreakpoints");
-        vsdbgFileLog.processFileLog("disconnect");
+        vsdbgFileLog.processFileLog(["setBreakpoints", "breakpointHitted"]);
+        vsdbgFileLog.processFileLog(["disconnect"]);
 
         vsdbgFileLog = null;
     });

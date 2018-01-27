@@ -84,6 +84,29 @@ export class SessionService {
         this.repositoryLog.save(this.currentSession);
     }
 
+    public registerHitted(breakpoint : BreakpointModel) : void {
+        if(this.currentSession == null)
+            return;
+
+        let eventData = EventData.newEventData();
+        eventData.EventKind = EventKind[EventKind.BreakpointHitted];
+        //     Detail = sessionModel.BreakpointLastHitName,
+        eventData.Namespace = breakpoint.Namespace;
+        eventData.Type = breakpoint.Type;
+        eventData.TypeFullPath = "TODO",
+        //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+        eventData.MethodKey = "",
+        //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
+        //     CharStart = sessionModel.CurrentDocument.StartLineText,
+        //     CharEnd = sessionModel.CurrentDocument.EndLineText,
+        eventData.LineNumber = breakpoint.LineNumber;
+        eventData.LineOfCode = breakpoint.LineOfCode;
+        eventData.Created = new Date();
+
+        this.currentSession.Events.push(eventData);
+        this.repositoryLog.save(this.currentSession);
+    }    
+
     public endCurrentSession() : void {
         this.currentSession.Finished = new Date();
 

@@ -12,7 +12,7 @@ export class VsdbgFileLog {
     private sessionService : SessionService = new SessionService();
     private currentSessionId : string = null;
 
-    public processFileLog(eventAction : string) : void {
+    public processFileLog(eventAction : string[]) : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
 
         for (let line of fileLines) {
@@ -23,12 +23,14 @@ export class VsdbgFileLog {
 
             let objLine = JSON.parse(strObjLine);
 
-            if(objLine.command == "launch" && eventAction == "launch"){
+            if(objLine.command == "launch" && eventAction.filter(e => e == "launch")[0] != undefined){
                 this.processLaunch(objLine);
                 break;
-            } else if(objLine.command == "setBreakpoints" && eventAction == "setBreakpoints"){
+            } else if(objLine.command == "setBreakpoints" && eventAction.filter(e => e == "setBreakpoints")[0] != undefined){
                 this.processBreakpoint(objLine);
-            } else if(objLine.command == "disconnect" && eventAction == "disconnect"){
+            } else if(objLine.event == "stopped" && eventAction.filter(e => e == "breakpointHitted")[0] != undefined){
+                this.processBreakpointHitted(objLine);
+            } else if(objLine.command == "disconnect" && eventAction.filter(e => e == "disconnect")[0] != undefined){
                 this.sessionService.endCurrentSession();
                 break;
             }
@@ -39,16 +41,16 @@ export class VsdbgFileLog {
         var self = this;
 
         watch(this.logFile, function(e: string) {
-            self.processFileLog("setBreakpoints");
+            self.processFileLog(["setBreakpoints", "breakpointHitted"]);
         });
     }
 
     private invalidStartLine(line : string) : boolean {
-        return !line.startsWith("->");
+        return !line.startsWith("-> (C) ") && !line.startsWith("<- (E) ");
     }
 
     private clearLine(line : string) : string {
-        return line.replace("-> (C) ", "");
+        return line.replace("-> (C) ", "").replace("<- (E) ", "");
     }
 
     private processLaunch(objLine : any): void {
@@ -79,5 +81,19 @@ export class VsdbgFileLog {
         }
 
         this.sessionService.registerBreakpoint(breakpoints);
+    }
+
+    private processBreakpointHitted(objLine: any): void {
+        if(objLine.body.reason != "breakpoint")
+            return;
+
+        let breakpoint = BreakpointModel.newBreakpointModel();
+        breakpoint.FileName = objLine.body.source.name;
+        breakpoint.LineNumber = objLine.body.line;
+        breakpoint.Namespace = CodeReader.getNamespace(objLine.body.source.path);
+        breakpoint.Type = CodeReader.getType(objLine.body.source.path);
+        breakpoint.LineOfCode = CodeReader.getCurrentLine(objLine.body.source.path, objLine.body.line);
+
+        this.sessionService.registerHitted(breakpoint);
     }
 }
