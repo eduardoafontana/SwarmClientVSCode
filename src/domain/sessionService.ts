@@ -12,7 +12,8 @@ export class SessionService {
     private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
-    private notAddedBreakpoints : boolean = true;
+    //private notAddedBreakpoints : boolean = true;
+    private breakpointOrigin : string = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
 
     public registerNewSession(dbgSessionId : string) : void{
         if(this.currentSession != null)
@@ -28,20 +29,21 @@ export class SessionService {
         this.repositoryLog.generateIdentifier();
         this.repositoryLog.save(this.currentSession);
 
-        this.notAddedBreakpoints = true;
+        //this.notAddedBreakpoints = true;
+        this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
     }
 
     public registerBreakpoint(breakpoints: BreakpointModel[]) : void {
         if(this.currentSession == null)
             return;
 
-        let breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedDuringDebug];
+/*         let breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedDuringDebug];
 
         if (this.notAddedBreakpoints){
             breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
 
             this.notAddedBreakpoints = false;
-        }
+        } */
 
         for (let breakpoint of breakpoints) {
 
@@ -69,7 +71,7 @@ export class SessionService {
 
             let breakpointData = BreakpointData.newBreakpointData();
             breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
-            breakpointData.Origin = breakpointOrigin;
+            breakpointData.Origin = this.breakpointOrigin;
             breakpointData.LineNumber = breakpoint.LineNumber;
             breakpointData.FileName = breakpoint.FileName;
             breakpointData.Namespace = breakpoint.Namespace;
@@ -87,6 +89,9 @@ export class SessionService {
     public registerHitted(breakpoint : BreakpointModel) : void {
         if(this.currentSession == null)
             return;
+
+        if(this.breakpointOrigin == BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug])
+            this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedDuringDebug];
 
         let eventData = EventData.newEventData();
         eventData.EventKind = EventKind[EventKind.BreakpointHitted];
@@ -113,6 +118,7 @@ export class SessionService {
         this.repositoryLog.save(this.currentSession);
 
         this.currentSession = null;
-        this.notAddedBreakpoints = true;
+        //this.notAddedBreakpoints = true;
+        this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
     }
 }
