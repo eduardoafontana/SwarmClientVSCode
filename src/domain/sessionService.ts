@@ -29,21 +29,12 @@ export class SessionService {
         this.repositoryLog.generateIdentifier();
         this.repositoryLog.save(this.currentSession);
 
-        //this.notAddedBreakpoints = true;
         this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
     }
 
     public registerBreakpoint(breakpoints: BreakpointModel[]) : void {
         if(this.currentSession == null)
             return;
-
-/*         let breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedDuringDebug];
-
-        if (this.notAddedBreakpoints){
-            breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
-
-            this.notAddedBreakpoints = false;
-        } */
 
         for (let breakpoint of breakpoints) {
 
@@ -118,7 +109,6 @@ export class SessionService {
         this.repositoryLog.save(this.currentSession);
 
         this.currentSession = null;
-        //this.notAddedBreakpoints = true;
         this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
     }
 }
