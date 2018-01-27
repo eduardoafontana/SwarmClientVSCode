@@ -50,4 +50,8 @@ export class EventData {
             Created: new Date('01 January 0 00:00:00 UTC')
         };
     }
+
+    public static generateEventHash(fileName : string, lineNumber : number, seq : number) : string{
+        return fileName + ", line " + lineNumber + " character TODO. seq: " + seq;//TODO: add character too.
+    }
 }

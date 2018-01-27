@@ -47,7 +47,7 @@ export class SessionService {
 
             let eventData = EventData.newEventData();
             eventData.EventKind = EventKind[EventKind.BreakpointAdd];
-            //     Detail = item.Name,
+            eventData.Detail = EventData.generateEventHash(breakpoint.FileName, breakpoint.LineNumber, undefined),
             eventData.Namespace = breakpoint.Namespace;
             eventData.Type = breakpoint.Type;
             eventData.TypeFullPath = "TODO",
@@ -77,8 +77,14 @@ export class SessionService {
         this.repositoryLog.save(this.currentSession);
     }
 
-    public registerHitted(breakpoint : BreakpointModel) : void {
+    public registerHitted(breakpoint : BreakpointModel, seq : number) : void {
         if(this.currentSession == null)
+            return;
+
+        let currentEventHash = EventData.generateEventHash(breakpoint.FileName, breakpoint.LineNumber, seq);
+        let alreadyRegistered = this.currentSession.Events.filter(e => e.Detail == currentEventHash)[0];
+
+        if(alreadyRegistered != undefined)
             return;
 
         if(this.breakpointOrigin == BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug])
@@ -86,7 +92,7 @@ export class SessionService {
 
         let eventData = EventData.newEventData();
         eventData.EventKind = EventKind[EventKind.BreakpointHitted];
-        //     Detail = sessionModel.BreakpointLastHitName,
+        eventData.Detail = currentEventHash,
         eventData.Namespace = breakpoint.Namespace;
         eventData.Type = breakpoint.Type;
         eventData.TypeFullPath = "TODO",
@@ -101,7 +107,7 @@ export class SessionService {
 
         this.currentSession.Events.push(eventData);
         this.repositoryLog.save(this.currentSession);
-    }    
+    }
 
     public endCurrentSession() : void {
         this.currentSession.Finished = new Date();

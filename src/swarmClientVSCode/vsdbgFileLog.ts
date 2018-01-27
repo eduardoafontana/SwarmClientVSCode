@@ -94,6 +94,6 @@ export class VsdbgFileLog {
         breakpoint.Type = CodeReader.getType(objLine.body.source.path);
         breakpoint.LineOfCode = CodeReader.getCurrentLine(objLine.body.source.path, objLine.body.line);
 
-        this.sessionService.registerHitted(breakpoint);
+        this.sessionService.registerHitted(breakpoint, objLine.seq);
     }
 }
