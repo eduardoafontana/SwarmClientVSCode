@@ -6,9 +6,10 @@ import { EventData, EventKind } from './dataModel/eventData';
 import { RepositoryLog } from './../dataLog/repositoryLog';
 import { Guid } from "guid-typescript";
 import { BreakpointModel } from './inputModel/breakpointModel';
+import { StepModel } from './inputModel/stepModel';
 
 export class SessionService {
-    
+
     private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
@@ -66,6 +67,35 @@ export class SessionService {
         //     CharEnd = sessionModel.CurrentDocument.EndLineText,
         eventData.LineNumber = breakpoint.LineNumber;
         eventData.LineOfCode = breakpoint.LineOfCode;
+        eventData.Created = new Date();
+
+        this.currentSession.Events.push(eventData);
+        this.repositoryLog.save(this.currentSession);
+    }
+
+    public registerStep(step: StepModel, seq: number): void {
+        if(this.currentSession == null)
+            return;
+
+        let currentEventHash = EventData.generateEventHash(step.FileName, step.LineNumber, seq);
+        let alreadyRegistered = this.currentSession.Events.filter(e => e.Detail == currentEventHash)[0];
+
+        if(alreadyRegistered != undefined)
+            return;
+
+        let eventData = EventData.newEventData();
+        eventData.EventKind = step.CurrentCommandStep;
+        eventData.Detail = currentEventHash,
+        eventData.Namespace = step.Namespace;
+        eventData.Type = step.Type;
+        eventData.TypeFullPath = "TODO",
+        //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+        eventData.MethodKey = "",
+        //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
+        eventData.CharStart = step.CharStart;
+        //     CharEnd = sessionModel.CurrentDocument.EndLineText,
+        eventData.LineNumber = step.LineNumber;
+        eventData.LineOfCode = step.LineOfCode;
         eventData.Created = new Date();
 
         this.currentSession.Events.push(eventData);

@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
         if(vsdbgFileLog == null)
             return;
 
-        vsdbgFileLog.processFileLog(["setBreakpoints", "breakpointHitted"]);
+        vsdbgFileLog.processFileLog(["setBreakpoints", "breakpointHitted", "registerSteps"]);
         vsdbgFileLog.processFileLog(["disconnect"]);
 
         vsdbgFileLog = null;

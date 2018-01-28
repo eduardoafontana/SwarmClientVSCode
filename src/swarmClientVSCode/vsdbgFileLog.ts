@@ -4,6 +4,7 @@ import { readFileSync, writeFile, exists, watch } from 'fs';
 import { SessionService } from './../domain/sessionService';
 import { BreakpointModel } from '../domain/inputModel/breakpointModel';
 import { CodeReader } from './codeReader';
+import { StepModel, CurrentCommandStep } from '../domain/inputModel/stepModel';
 
 export class VsdbgFileLog {
 
@@ -28,8 +29,10 @@ export class VsdbgFileLog {
                 break;
             } else if(objLine.command == "setBreakpoints" && eventAction.filter(e => e == "setBreakpoints")[0] != undefined){
                 this.processBreakpoint(objLine);
-            } else if(objLine.event == "stopped" && eventAction.filter(e => e == "breakpointHitted")[0] != undefined){
+            } else if(objLine.event == "stopped" && objLine.body.reason == "breakpoint" && eventAction.filter(e => e == "breakpointHitted")[0] != undefined){
                 this.processBreakpointHitted(objLine);
+            } else if(objLine.event == "stopped" && objLine.body.reason == "step" && eventAction.filter(e => e == "registerSteps")[0] != undefined){
+                this.processSteps(objLine);
             } else if(objLine.command == "disconnect" && eventAction.filter(e => e == "disconnect")[0] != undefined){
                 this.sessionService.endCurrentSession();
                 break;
@@ -41,7 +44,7 @@ export class VsdbgFileLog {
         var self = this;
 
         watch(this.logFile, function(e: string) {
-            self.processFileLog(["setBreakpoints", "breakpointHitted"]);
+            self.processFileLog(["setBreakpoints", "breakpointHitted", "registerSteps"]);
         });
     }
 
@@ -95,5 +98,21 @@ export class VsdbgFileLog {
         breakpoint.LineOfCode = CodeReader.getCurrentLine(objLine.body.source.path, objLine.body.line);
 
         this.sessionService.registerHitted(breakpoint, objLine.seq);
+    }
+
+    private processSteps(objLine: any): void {
+        if(objLine.body.reason != "step")
+            return;
+
+        let step = StepModel.newStepModel();
+        step.CurrentCommandStep = CurrentCommandStep[CurrentCommandStep.StepOver];
+        step.FileName = objLine.body.source.name;
+        step.LineNumber = objLine.body.line;
+        step.Namespace = CodeReader.getNamespace(objLine.body.source.path);
+        step.Type = CodeReader.getType(objLine.body.source.path);
+        step.LineOfCode = CodeReader.getCurrentLine(objLine.body.source.path, objLine.body.line);
+        step.CharStart = objLine.body.column;
+
+        this.sessionService.registerStep(step, objLine.seq);
     }
 }
