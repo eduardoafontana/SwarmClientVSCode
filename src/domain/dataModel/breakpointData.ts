@@ -15,6 +15,9 @@ export class BreakpointData {
     public Created: Date;
     public FileName: string;//TODO: new, review it on SwarmVS2015/2017
 
+    public AddedSequential : number;//TODO: new, review it on SwarmVS2015/2017 or not register in jSon data/file/webservice.
+    public RemovedSequencial : number;//TODO: new, review it on SwarmVS2015/2017 or not register in jSon data/file/webservice.
+
     public static newBreakpointData() : BreakpointData {
         return <BreakpointData> {
             BreakpointKind: "",
@@ -25,16 +28,9 @@ export class BreakpointData {
             Origin: "",
             Created: new Date('01 January 0 00:00:00 UTC'),
             FileName: "",
+
+            AddedSequential: 0,
+            RemovedSequencial: 0,
         };
     }
-
-    /*
-      "BreakpointKind": "Line",
-      "Namespace": "ConsoleApp1",
-      "Type": "Adress",
-      "LineNumber": 22,s
-      "LineOfCode": "return String.Format(\"{0} : {1}\", Number, Street);",
-      "Origin": "AddedBeforeDebug",
-      "Created": "2017-12-20T19:14:00.8705589-02:00"
-    */
 }

@@ -12,7 +12,6 @@ export class SessionService {
     private currentSession : SessionData = null;
     private repositoryLog : RepositoryLog = new RepositoryLog();
 
-    //private notAddedBreakpoints : boolean = true;
     private breakpointOrigin : string = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
 
     public registerNewSession(dbgSessionId : string) : void{
@@ -32,49 +31,13 @@ export class SessionService {
         this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
     }
 
-    public registerBreakpoint(breakpoints: BreakpointModel[]) : void {
+    public registerBreakpoint(breakpoints: BreakpointModel[], seq : number) : void {
         if(this.currentSession == null)
             return;
 
-        for (let breakpoint of breakpoints) {
+        this.registerBreakpointAdded(breakpoints, seq);
 
-            let exist = this.currentSession.Breakpoints.filter(b => 
-                b.FileName == breakpoint.FileName && 
-                b.LineNumber == breakpoint.LineNumber)[0];
-
-            if(exist != undefined)
-                continue;
-
-            let eventData = EventData.newEventData();
-            eventData.EventKind = EventKind[EventKind.BreakpointAdd];
-            eventData.Detail = EventData.generateEventHash(breakpoint.FileName, breakpoint.LineNumber, undefined),
-            eventData.Namespace = breakpoint.Namespace;
-            eventData.Type = breakpoint.Type;
-            eventData.TypeFullPath = "TODO",
-            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
-            eventData.MethodKey = "",
-            //     MethodSignature = item.FunctionName,
-            //     CharStart = item.StartLineText,
-            //     CharEnd = item.DocumentModel.EndLineText,
-            eventData.LineNumber = breakpoint.LineNumber;
-            eventData.LineOfCode = breakpoint.LineOfCode;
-            eventData.Created = new Date();
-
-            let breakpointData = BreakpointData.newBreakpointData();
-            breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
-            breakpointData.Origin = this.breakpointOrigin;
-            breakpointData.LineNumber = breakpoint.LineNumber;
-            breakpointData.FileName = breakpoint.FileName;
-            breakpointData.Namespace = breakpoint.Namespace;
-            breakpointData.Type = breakpoint.Type;
-            breakpointData.LineOfCode = breakpoint.LineOfCode;
-            breakpointData.Created = new Date();
-    
-            this.currentSession.Events.push(eventData);
-            this.currentSession.Breakpoints.push(breakpointData);
-        }
-
-        this.repositoryLog.save(this.currentSession);
+        this.registerBreakpointRemoved(breakpoints, seq);
     }
 
     public registerHitted(breakpoint : BreakpointModel, seq : number) : void {
@@ -116,5 +79,86 @@ export class SessionService {
 
         this.currentSession = null;
         this.breakpointOrigin = BreakpointOrigin[BreakpointOrigin.AddedBeforeDebug];
+    }
+
+    private registerBreakpointAdded(breakpoints: BreakpointModel[], seq: number): void {
+        for (let breakpoint of breakpoints) {
+
+            let exist = this.currentSession.Breakpoints.filter(b => 
+                b.FileName == breakpoint.FileName && 
+                b.LineNumber == breakpoint.LineNumber)[0];
+
+            if(exist != undefined)
+            {
+                if(exist.RemovedSequencial == 0)
+                    continue;
+                else if(seq > exist.RemovedSequencial) {
+                    this.currentSession.Breakpoints.splice(this.currentSession.Breakpoints.indexOf(exist), 1);
+                } else
+                    continue;
+            }
+
+            let eventData = EventData.newEventData();
+            eventData.EventKind = EventKind[EventKind.BreakpointAdd];
+            eventData.Detail = EventData.generateEventHash(breakpoint.FileName, breakpoint.LineNumber, seq),
+            eventData.Namespace = breakpoint.Namespace;
+            eventData.Type = breakpoint.Type;
+            eventData.TypeFullPath = "TODO",
+            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+            eventData.MethodKey = "",
+            //     MethodSignature = item.FunctionName,
+            //     CharStart = item.StartLineText,
+            //     CharEnd = item.DocumentModel.EndLineText,
+            eventData.LineNumber = breakpoint.LineNumber;
+            eventData.LineOfCode = breakpoint.LineOfCode;
+            eventData.Created = new Date();
+
+            let breakpointData = BreakpointData.newBreakpointData();
+            breakpointData.BreakpointKind = BreakpointKind[BreakpointKind.Line];
+            breakpointData.Origin = this.breakpointOrigin;
+            breakpointData.LineNumber = breakpoint.LineNumber;
+            breakpointData.FileName = breakpoint.FileName;
+            breakpointData.Namespace = breakpoint.Namespace;
+            breakpointData.Type = breakpoint.Type;
+            breakpointData.LineOfCode = breakpoint.LineOfCode;
+            breakpointData.Created = new Date();
+            breakpointData.AddedSequential = seq;
+    
+            this.currentSession.Events.push(eventData);
+            this.currentSession.Breakpoints.push(breakpointData);
+        }
+
+        this.repositoryLog.save(this.currentSession);
+    }
+
+    private registerBreakpointRemoved(breakpoints: BreakpointModel[], seq: number): void {
+        let excludedList = this.currentSession.Breakpoints.filter(b => 
+            b.AddedSequential < seq && 
+            breakpoints.filter(bC => bC.FileName == b.FileName && bC.LineNumber == b.LineNumber)[0] == undefined &&
+            b.RemovedSequencial == 0
+        );
+
+        for (let breakpointExcluded of excludedList) {
+            let eventData = EventData.newEventData();
+            eventData.EventKind = EventKind[EventKind.BreakpointRemove];
+            eventData.Detail = EventData.generateEventHash(breakpointExcluded.FileName, breakpointExcluded.LineNumber, seq),
+            eventData.Namespace = breakpointExcluded.Namespace;
+            eventData.Type = breakpointExcluded.Type;
+            eventData.TypeFullPath = "TODO",
+            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+            eventData.MethodKey = "",
+            //     MethodSignature = item.FunctionName,
+            //     CharStart = item.StartLineText,
+            //     CharEnd = item.DocumentModel.EndLineText,
+            eventData.LineNumber = breakpointExcluded.LineNumber;
+            eventData.LineOfCode = breakpointExcluded.LineOfCode;
+            eventData.Created = new Date();
+
+            this.currentSession.Events.push(eventData);
+          
+            breakpointExcluded.RemovedSequencial = seq;
+        }
+
+        this.repositoryLog.save(this.currentSession);
     }
 }

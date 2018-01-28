@@ -80,7 +80,7 @@ export class VsdbgFileLog {
             breakpoints.push(breakpoint);
         }
 
-        this.sessionService.registerBreakpoint(breakpoints);
+        this.sessionService.registerBreakpoint(breakpoints, objLine.seq);
     }
 
     private processBreakpointHitted(objLine: any): void {
