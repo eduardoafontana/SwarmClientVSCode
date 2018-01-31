@@ -6,7 +6,8 @@ export class BreakpointModel {
     public LineNumber: number;
     public LineOfCode: string;
     public Namespace: string;
-    public Type: string;    
+    public Type: string;
+    public Method: string;
 
     public static newBreakpointModel() : BreakpointModel {
         return <BreakpointModel> {
@@ -15,6 +16,7 @@ export class BreakpointModel {
             LineOfCode: "",
             Namespace: "",
             Type: "",
+            Method: "",
         };
     }
 }

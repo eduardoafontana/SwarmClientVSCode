@@ -59,9 +59,9 @@ export class SessionService {
         eventData.Detail = currentEventHash,
         eventData.Namespace = breakpoint.Namespace;
         eventData.Type = breakpoint.Type;
-        eventData.TypeFullPath = "TODO",
-        //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
-        eventData.MethodKey = "",
+        eventData.TypeFullPath = "TODO";
+        eventData.Method = breakpoint.Method;
+        eventData.MethodKey = "";
         //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
         //     CharStart = sessionModel.CurrentDocument.StartLineText,
         //     CharEnd = sessionModel.CurrentDocument.EndLineText,
