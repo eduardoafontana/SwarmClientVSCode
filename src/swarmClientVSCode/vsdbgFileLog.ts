@@ -78,6 +78,7 @@ export class VsdbgFileLog {
             breakpoint.LineNumber = breakpointEntry.line;
             breakpoint.Namespace = CodeReader.getNamespace(objLine.arguments.source.path);
             breakpoint.Type = CodeReader.getType(objLine.arguments.source.path);
+            breakpoint.Method = CodeReader.getMethod(objLine.arguments.source.path, breakpointEntry.line);
             breakpoint.LineOfCode = CodeReader.getCurrentLine(objLine.arguments.source.path, breakpointEntry.line);
 
             breakpoints.push(breakpoint);
@@ -111,6 +112,7 @@ export class VsdbgFileLog {
         step.LineNumber = objLine.body.line;
         step.Namespace = CodeReader.getNamespace(objLine.body.source.path);
         step.Type = CodeReader.getType(objLine.body.source.path);
+        step.Method = CodeReader.getMethod(objLine.body.source.path, objLine.body.line);
         step.LineOfCode = CodeReader.getCurrentLine(objLine.body.source.path, objLine.body.line);
         step.CharStart = objLine.body.column;
 

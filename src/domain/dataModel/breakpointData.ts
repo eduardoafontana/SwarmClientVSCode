@@ -14,6 +14,7 @@ export class BreakpointData {
     public Origin: string;
     public Created: Date;
     public FileName: string;//TODO: new, review it on SwarmVS2015/2017
+    public Method: string;//TODO: new, review it on SwarmVS2015/2017
 
     public AddedSequential : number;//TODO: new, review it on SwarmVS2015/2017 or not register in jSon data/file/webservice.
     public RemovedSequencial : number;//TODO: new, review it on SwarmVS2015/2017 or not register in jSon data/file/webservice.
@@ -28,6 +29,7 @@ export class BreakpointData {
             Origin: "",
             Created: new Date('01 January 0 00:00:00 UTC'),
             FileName: "",
+            Method: "",
 
             AddedSequential: 0,
             RemovedSequencial: 0,

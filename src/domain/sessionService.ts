@@ -56,7 +56,7 @@ export class SessionService {
 
         let eventData = EventData.newEventData();
         eventData.EventKind = EventKind[EventKind.BreakpointHitted];
-        eventData.Detail = currentEventHash,
+        eventData.Detail = currentEventHash;
         eventData.Namespace = breakpoint.Namespace;
         eventData.Type = breakpoint.Type;
         eventData.TypeFullPath = "TODO";
@@ -88,9 +88,9 @@ export class SessionService {
         eventData.Detail = currentEventHash,
         eventData.Namespace = step.Namespace;
         eventData.Type = step.Type;
-        eventData.TypeFullPath = "TODO",
-        //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
-        eventData.MethodKey = "",
+        eventData.TypeFullPath = "TODO";
+        eventData.Method = step.Method;
+        eventData.MethodKey = "";
         //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
         eventData.CharStart = step.CharStart;
         //     CharEnd = sessionModel.CurrentDocument.EndLineText,
@@ -133,9 +133,9 @@ export class SessionService {
             eventData.Detail = EventData.generateEventHash(breakpoint.FileName, breakpoint.LineNumber, seq),
             eventData.Namespace = breakpoint.Namespace;
             eventData.Type = breakpoint.Type;
-            eventData.TypeFullPath = "TODO",
-            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
-            eventData.MethodKey = "",
+            eventData.TypeFullPath = "TODO";
+            eventData.Method = breakpoint.Method;
+            eventData.MethodKey = "";
             //     MethodSignature = item.FunctionName,
             //     CharStart = item.StartLineText,
             //     CharEnd = item.DocumentModel.EndLineText,
@@ -150,6 +150,7 @@ export class SessionService {
             breakpointData.FileName = breakpoint.FileName;
             breakpointData.Namespace = breakpoint.Namespace;
             breakpointData.Type = breakpoint.Type;
+            breakpointData.Method = breakpoint.Method;
             breakpointData.LineOfCode = breakpoint.LineOfCode;
             breakpointData.Created = new Date();
             breakpointData.AddedSequential = seq;
@@ -175,7 +176,7 @@ export class SessionService {
             eventData.Namespace = breakpointExcluded.Namespace;
             eventData.Type = breakpointExcluded.Type;
             eventData.TypeFullPath = "TODO",
-            //     Method = PathNodeItemModel.GetMethodName(item.FunctionName),
+            eventData.Method = breakpointExcluded.Method,
             eventData.MethodKey = "",
             //     MethodSignature = item.FunctionName,
             //     CharStart = item.StartLineText,
@@ -185,7 +186,7 @@ export class SessionService {
             eventData.Created = new Date();
 
             this.currentSession.Events.push(eventData);
-          
+
             breakpointExcluded.RemovedSequencial = seq;
         }
 
