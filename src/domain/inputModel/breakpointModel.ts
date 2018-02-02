@@ -8,6 +8,8 @@ export class BreakpointModel {
     public Namespace: string;
     public Type: string;
     public Method: string;
+    public CharStart: number;
+    public CharEnd: number;
 
     public static newBreakpointModel() : BreakpointModel {
         return <BreakpointModel> {
@@ -17,6 +19,8 @@ export class BreakpointModel {
             Namespace: "",
             Type: "",
             Method: "",
+            CharStart: 0,
+            CharEnd: 0
         };
     }
 }

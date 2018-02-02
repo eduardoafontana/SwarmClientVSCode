@@ -63,8 +63,8 @@ export class SessionService {
         eventData.Method = breakpoint.Method;
         eventData.MethodKey = "";
         //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
-        //     CharStart = sessionModel.CurrentDocument.StartLineText,
-        //     CharEnd = sessionModel.CurrentDocument.EndLineText,
+        eventData.CharStart = breakpoint.CharStart;
+        eventData.CharEnd = breakpoint.CharEnd;
         eventData.LineNumber = breakpoint.LineNumber;
         eventData.LineOfCode = breakpoint.LineOfCode;
         eventData.Created = new Date();
@@ -93,7 +93,7 @@ export class SessionService {
         eventData.MethodKey = "";
         //     MethodSignature = sessionModel.CurrentStackFrameFunctionName,
         eventData.CharStart = step.CharStart;
-        //     CharEnd = sessionModel.CurrentDocument.EndLineText,
+        eventData.CharEnd = step.CharEnd;
         eventData.LineNumber = step.LineNumber;
         eventData.LineOfCode = step.LineOfCode;
         eventData.Created = new Date();
@@ -137,8 +137,8 @@ export class SessionService {
             eventData.Method = breakpoint.Method;
             eventData.MethodKey = "";
             //     MethodSignature = item.FunctionName,
-            //     CharStart = item.StartLineText,
-            //     CharEnd = item.DocumentModel.EndLineText,
+            eventData.CharStart = breakpoint.CharStart;
+            eventData.CharEnd = breakpoint.CharEnd;
             eventData.LineNumber = breakpoint.LineNumber;
             eventData.LineOfCode = breakpoint.LineOfCode;
             eventData.Created = new Date();
@@ -152,6 +152,8 @@ export class SessionService {
             breakpointData.Type = breakpoint.Type;
             breakpointData.Method = breakpoint.Method;
             breakpointData.LineOfCode = breakpoint.LineOfCode;
+            breakpointData.CharStart = breakpoint.CharStart;
+            breakpointData.CharEnd = breakpoint.CharEnd;
             breakpointData.Created = new Date();
             breakpointData.AddedSequential = seq;
     
@@ -175,12 +177,12 @@ export class SessionService {
             eventData.Detail = EventData.generateEventHash(breakpointExcluded.FileName, breakpointExcluded.LineNumber, seq),
             eventData.Namespace = breakpointExcluded.Namespace;
             eventData.Type = breakpointExcluded.Type;
-            eventData.TypeFullPath = "TODO",
-            eventData.Method = breakpointExcluded.Method,
-            eventData.MethodKey = "",
+            eventData.TypeFullPath = "TODO";
+            eventData.Method = breakpointExcluded.Method;
+            eventData.MethodKey = "";
             //     MethodSignature = item.FunctionName,
-            //     CharStart = item.StartLineText,
-            //     CharEnd = item.DocumentModel.EndLineText,
+            eventData.CharStart = breakpointExcluded.CharStart;
+            eventData.CharEnd = breakpointExcluded.CharEnd;
             eventData.LineNumber = breakpointExcluded.LineNumber;
             eventData.LineOfCode = breakpointExcluded.LineOfCode;
             eventData.Created = new Date();

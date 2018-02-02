@@ -93,4 +93,26 @@ export class CodeReader {
             return "Fatal error to get line code in file.";
         }
     }
+
+    public static getCharStart(filePath: string, lineNumber: number): number {
+        let fileLines = readFileSync(filePath).toString().split('\n');
+
+        let line = fileLines[lineNumber - 1];
+        let emptySpaceCount = 0;
+
+        for(let i = 0; i < line.length; i++){
+            if(line[i] == " ")
+                emptySpaceCount++;
+            else
+                break;
+        }
+
+        return emptySpaceCount + 1;
+    }
+
+    public static getCharEnd(filePath: string, lineNumber: number): number {
+        let fileLines = readFileSync(filePath).toString().split('\n');
+
+        return fileLines[lineNumber - 1].length;
+    }
 }
