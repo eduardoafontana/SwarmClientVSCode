@@ -12,6 +12,7 @@ export class VsdbgFileLog {
 
     private sessionService : SessionService = new SessionService();
     private currentSessionId : string = null;
+    private currentStep : string = CurrentCommandStep[CurrentCommandStep.StepOver];
 
     public processFileLog(eventAction : string[]) : void {
         let fileLines = readFileSync(this.logFile).toString().split('\n');
@@ -31,6 +32,8 @@ export class VsdbgFileLog {
                 this.processBreakpoint(objLine);
             } else if(objLine.event == "stopped" && objLine.body.reason == "breakpoint" && eventAction.filter(e => e == "breakpointHitted")[0] != undefined){
                 this.processBreakpointHitted(objLine);
+            } else if(objLine.command == "stepIn" && eventAction.filter(e => e == "registerSteps")[0] != undefined){
+                this.currentStep = CurrentCommandStep[CurrentCommandStep.StepInto];
             } else if(objLine.event == "stopped" && objLine.body.reason == "step" && eventAction.filter(e => e == "registerSteps")[0] != undefined){
                 this.processSteps(objLine);
             } else if(objLine.command == "disconnect" && eventAction.filter(e => e == "disconnect")[0] != undefined){
@@ -111,7 +114,7 @@ export class VsdbgFileLog {
             return;
 
         let step = StepModel.newStepModel();
-        step.CurrentCommandStep = CurrentCommandStep[CurrentCommandStep.StepOver];
+        step.CurrentCommandStep = this.currentStep;
         step.FileName = objLine.body.source.name;
         step.LineNumber = objLine.body.line;
         step.Namespace = CodeReader.getNamespace(objLine.body.source.path);
@@ -122,5 +125,7 @@ export class VsdbgFileLog {
         step.CharEnd = CodeReader.getCharEnd(objLine.body.source.path, objLine.body.line);
 
         this.sessionService.registerStep(step, objLine.seq);
+
+        this.currentStep = CurrentCommandStep[CurrentCommandStep.StepOver];
     }
 }
